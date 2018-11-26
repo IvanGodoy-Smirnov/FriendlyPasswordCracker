@@ -34,4 +34,59 @@ public class PasswordCracker {
             throw new IllegalArgumentException("Encrypted password and/or database is null");
         return database.decrypt(encryptedPassword);
     }
+
+    /**
+    Capitalizes the first occurence of a letter in the english alphabet
+    @param word the word to capitalize the first letter of  
+    @return the capitalized word
+     */
+    public String capitalizeFirstLetter(String word) {
+        final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        StringBuilder capitalized = new StringBuilder();
+        if (word == null)
+            throw new IllegalArgumentException("String is null");
+        Boolean foundFirstLetter = false;
+        for(int index = 0; index < word.length(); index++){
+            char currentChar = word.charAt(index);
+            if(!foundFirstLetter && Character.isLetter(currentChar)){
+                currentChar = Character.toUpperCase(currentChar);
+                foundFirstLetter = true;
+            }
+            capitalized.append(currentChar);
+        }
+        return capitalized.toString();
+    }
+    /**
+    Replaces all occurences of 'a' with @
+    @param return the new string with @ where the letter 'a' or 'A' is
+     */
+    public String replaceAWithAt(String word){
+        String newWord = word.replace('a','@');
+        newWord = newWord.replace('A','@');
+        return newWord;
+    }
+    /**
+    Replaces all occurences of 'e' with 3
+    @param return the new string with 3 where the letter 'E' or 'e' is
+     */
+    public String replaceEWithThree(String word){
+        String newWord = word.replace('e','3');
+        newWord = newWord.replace('E','3');
+        return newWord;    
+    }
+    /**
+    Replaces all occurences of 'e' with 1
+    @param return the new string with @s where the letter 'i' or 'I' is
+     */
+    public String replaceIWithOne(String word){
+        String newWord = word.replace('i','1');
+        newWord = newWord.replace('I','1');
+        return newWord;   
+    }
+    /**
+    Adds the current year (2018) to the end of a word
+     */
+    public String addYear(String word){
+        return word + "2018";
+    }
 }

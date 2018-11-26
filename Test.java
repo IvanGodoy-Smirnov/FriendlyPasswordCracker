@@ -2,6 +2,15 @@ import java.util.ArrayList;
 
 public class Test {
     public static void main(String[] args){
+        PasswordCracker cracker = new PasswordCracker();
+        String[] testWords = new String[] {"isantose","SaintoEes","12isantos","123i54","!dfef","123456a"};
+        for(int index = 0; index < testWords.length;index++ ){
+            System.out.println(cracker.addYear(testWords[index]));
+        }
+       
+    }
+
+    public void basicTest() {
         PasswordCracker testCracker=new PasswordCracker(); 
         DatabaseStandard database1=new DatabaseStandard(); 
         ArrayList<String> commonPass=new ArrayList<String>(); 
@@ -14,5 +23,6 @@ public class Test {
         String code=new String("F35D55B3ACF667911A679B44918F5D88B2400823"); 
         String discoverPassword=testCracker.crackPassword(code,database1); 
         System.out.println("Decrypt: "+code+ " Password: "+discoverPassword+";");
+
     }
 }
