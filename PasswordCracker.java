@@ -13,38 +13,23 @@ public class PasswordCracker {
             throw new IllegalArgumentException("Common Password and/or database is null");
         }
         ArrayList<String> augmentedPasswords = new ArrayList<String>(commonPasswords);
+        //Loops until the augmentations stop producing NEW augmentations 
         for(int index = 0; index < augmentedPasswords.size(); index ++) {
             String plainPassword = augmentedPasswords.get(index);
-            insert(new String[] {plainPassword},database,augmentedPasswords);
-            insert(capitalizeFirstLetter(plainPassword),database,augmentedPasswords);
-            insert(replaceAWithAt(plainPassword),database,augmentedPasswords);
-            insert(replaceEWithThree(plainPassword),database,augmentedPasswords);
-            insert(replaceIWithOne(plainPassword),database,augmentedPasswords);
+            insertToDatabase(plainPassword,database,augmentedPasswords);
+            insertToDatabase(StringExtension.capitalizeFirstLetter(plainPassword),database,augmentedPasswords);
+            insertToDatabase(StringExtension.replaceAWithAt(plainPassword),database,augmentedPasswords);
+            insertToDatabase(StringExtension.replaceEWithThree(plainPassword),database,augmentedPasswords);
+            insertToDatabase(StringExtension.replaceIWithOne(plainPassword),database,augmentedPasswords);
         }
+        //Since adding "2018" would always create new augmentations (keeping the loop above)
+        //in an infinite loop, once every augmentation has been made, one more pass through the array
+        //is done to add 2019 to every password created
         for(int index = 0; index < augmentedPasswords.size(); index ++) {
-            insert(addYear(augmentedPasswords.get(index)),database,null);
+            insertToDatabase(StringExtension.addYear(augmentedPasswords.get(index)),database,null);
         }  
-     
-        System.out.println(database.size());
     }
 
-    private void insert(String[] plainPasswords, DatabaseInterface database, ArrayList<String> augmentedPasswords){
-       for(int index = 0; index < plainPasswords.length; index++){
-
-            try {
-                String plainPassword = plainPasswords[index];
-                String encryptedPassword = Sha1.hash(plainPassword);
-                String previousPassword = database.save(plainPassword, encryptedPassword);
-                if (previousPassword == null && augmentedPasswords != null)
-                augmentedPasswords.add(plainPassword);
-            }
-            catch(UnsupportedEncodingException e){
-                e.printStackTrace();
-            }
-
-       }
-       
-    }
     /**
     Cracks a password 
     @param encryptedPassword the password to be cracked
@@ -59,70 +44,54 @@ public class PasswordCracker {
             plainPassword = "";
         return plainPassword;
     }
+    /**
+    Inserts plain passwords and their corresponding hash1 value into the given database and places the plain passwords into an array if given.
+    @param plainPasswords array of passwords 
+    @param database the database to place the plain password and hashed password
+    @param augmentedPasswords (optional) the array to place the new plain passwords in
+     */
+     private void insertToDatabase(String[] plainPasswords, DatabaseInterface database, ArrayList<String> augmentedPasswords){
+        if(plainPasswords == null || database == null)
+            throw new IllegalArgumentException("array of passwords and/or database is null");
+    
+        for(int index = 0; index < plainPasswords.length; index++){
+                try {
+                    String plainPassword = plainPasswords[index];
+                    String encryptedPassword = Sha1.hash(plainPassword);
+                    String previousPassword = database.save(plainPassword, encryptedPassword);
+                    if (previousPassword == null && augmentedPasswords != null)
+                        augmentedPasswords.add(plainPassword);
+                }
+                catch(UnsupportedEncodingException e){
+                    e.printStackTrace();
+                }
 
-    /**
-    Capitalizes the first occurence of a letter in the english alphabet
-    @param word the word to capitalize the first letter of  
-    @return the capitalized word
-     */
-    public String[] capitalizeFirstLetter(String word) {
-        final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        StringBuilder capitalized = new StringBuilder();
-        if (word == null)
-            throw new IllegalArgumentException("String is null");
-        Boolean foundFirstLetter = false;
-        for(int index = 0; index < word.length(); index++){
-            char currentChar = word.charAt(index);
-            if(!foundFirstLetter && Character.isLetter(currentChar)){
-                currentChar = Character.toUpperCase(currentChar);
-                foundFirstLetter = true;
-            }
-            capitalized.append(currentChar);
         }
-        return new String[] {capitalized.toString()};
     }
-    /**
-    Replaces all occurences of 'a' with @
-    @param return the new string with @ where the letter 'a' or 'A' is
+     /**
+    Inserts a plain password and its corresponding hash1 value into the given database and places the plain password into an array if given.
+    @param plainPassword array of passwords 
+    @param database the database to place the plain password and hashed password
+    @param augmentedPasswords (optional) the array to place the new plain passwords in
      */
-    public String[] replaceAWithAt(String word){
-        String[] replacements = new String[] {word.replaceAll("(?i)a","@"),replaceLast(word,'a','@'), word.replaceFirst("(?i)a","@")};
-        return replacements;
-    }
-    /**
-    Replaces all occurences of 'e' with 3
-    @param return the new string with 3 where the letter 'E' or 'e' is
-     */
-    public String[] replaceEWithThree(String word){
-        String[] replacements = new String[] {word.replaceAll("(?i)e","3"),replaceLast(word,'e','3'), word.replaceFirst("(?i)e","3")};
-        return replacements;  
-    }
-    /**
-    Replaces all occurences of 'e' with 1
-    @param return the new string with @s where the letter 'i' or 'I' is
-     */
-    public String[] replaceIWithOne(String word){
-        String[] replacements = new String[] {word.replaceAll("(?i)i","1"),replaceLast(word,'i','1'), word.replaceFirst("(?i)i","1")};
-        return replacements;  
-    }
-    /**
-    Adds the current year (2018) to the end of a word
-     */
-    public String[] addYear(String word){
-        return new String[] {word + "2018"};
+    private void insertToDatabase(String plainPassword, DatabaseInterface database, ArrayList<String> augmentedPasswords){
+        if(plainPassword == null || database == null)
+            throw new IllegalArgumentException("array of passwords and/or database is null");
+        try {
+            String encryptedPassword = Sha1.hash(plainPassword);
+            String previousPassword = database.save(plainPassword, encryptedPassword);
+            if (previousPassword == null && augmentedPasswords != null)
+                augmentedPasswords.add(plainPassword);
+        }
+        catch(UnsupportedEncodingException e){
+            System.out.println("Failed to hash a plain password, view the stacktrace below\n\n");
+            e.printStackTrace();
+        }
     }
 
-    public String replaceLast(String word, char oldChar, char newChar ){
-        StringBuilder stringBuilder = new StringBuilder();
-        int lastIndex = -1;
-        for(int index = 0; index < word.length(); index++){
-            if(oldChar == word.charAt(index) && word.substring(index).indexOf(oldChar) == word.substring(index).lastIndexOf(oldChar)){
-                stringBuilder.append(newChar);
-            }
-            else{
-                stringBuilder.append(word.charAt(index));
-            }
-        }
-        return stringBuilder.toString();
-    }
+
+   
+   
+    
+   
 }

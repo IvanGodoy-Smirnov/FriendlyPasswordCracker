@@ -19,7 +19,7 @@ public class Test {
         passwords.add("santosie");
         PasswordCracker cracker = new PasswordCracker();
 
-        System.out.println(cracker.replaceLast("anto",'s','$'));
+ //       System.out.println(cracker.replaceLast("anto",'s','$'));
 
 
         // for(int index = 0; index < passwords.size(); index++){
