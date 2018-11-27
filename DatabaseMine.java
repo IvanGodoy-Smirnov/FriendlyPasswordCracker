@@ -38,12 +38,13 @@ public class DatabaseMine implements DatabaseInterface {
             int entryLocation = hashFunction(key);
             if(entryLocation < 0 || entryLocation >= hashtable.length)
                 throw new IndexOutOfBoundsException("hash function returned index out of range");
+            boolean isReplaced = false;
             while(hashtable[entryLocation] != null && !hashtable[entryLocation].getKey().equals(key)){
                 entryLocation = (entryLocation + 1) % TABLE_SIZE;
                 numberOfProbes += 1;
             }
             numberOfProbes +=1;
-            if(entryLocation != hashFunction(key))
+            if(entryLocation != hashFunction(key) && hashtable[entryLocation] == null)
                 numberOfDisplacements +=1;
             Entry newEntry = new Entry(key,value);
             hashtable[entryLocation] = newEntry;
@@ -80,12 +81,12 @@ public class DatabaseMine implements DatabaseInterface {
             return numberOfDisplacements;
         }
 
-        public int averageProbes() {
-            return size()/numberOfProbes;
+        public double averageProbes() {
+            return size()/(double) numberOfProbes;
         }
 
-        public int loadFactor(){
-            return size()/TABLE_SIZE;
+        public double loadFactor(){
+            return size()/(double) TABLE_SIZE;
         }
         private int hashFunction(String key) {
             int address=key.hashCode()%TABLE_SIZE;
@@ -141,7 +142,7 @@ public class DatabaseMine implements DatabaseInterface {
         System.out.println("Size is " + size() + " passwords\n" + 
                         "Intial Number of Indexes When Created: " + database.getInitialIndexes() + "\n" +
                         "Load Factor: " + database.loadFactor() + "\n" + 
-                        "Average Number of Probes: \n" + database.averageProbes() + "\n" + 
+                        "Average Number of Probes: " + database.averageProbes() + "\n" + 
                         "Number of displacements (due to collisions): " + database.numberOfDisplacements );
     }
 }
