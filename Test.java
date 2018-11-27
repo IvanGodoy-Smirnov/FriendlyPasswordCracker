@@ -1,7 +1,9 @@
-import java.util.ArrayList;
+import java.util.*;
+
 
 public class Test {
     public static void main(String[] args){
+        
         kika();
         // System.out.println("ied".replaceFirst('d','D'));
         // PasswordCracker cracker = new PasswordCracker();

@@ -44,6 +44,6 @@ public class DatabaseStandard implements DatabaseInterface {
     Prints the stats of the database (size and initial # of indexes when created)
      */
     public void printStatistics(){
-        System.out.println("Size is " + size() + " passwords\n" + "Intial Number of Indexes When Created: 0");
+        System.out.println("Size is " + size() + " passwords\n" + "Intial Number of Indexes When Created: 6");
     } // print statistics based on type of Database
 }

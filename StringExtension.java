@@ -52,6 +52,8 @@ public class StringExtension {
      */
     public static String capitalizeFirstLetter(String word) {
         final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        if(word == null)
+            throw new IllegalArgumentException("Word is null");
         StringBuilder capitalized = new StringBuilder();
         if (word == null)
             throw new IllegalArgumentException("String is null");
@@ -84,6 +86,8 @@ public class StringExtension {
     @param return the new string with @s where the letter 'i' or 'I' is
      */
     public static String[] replaceIWithOne(String word){
+         if(word == null)
+            throw new IllegalArgumentException("Word is null");
         String[] replacements = {word.replaceAll(I_STRING,ONE_STRING),replaceLast(word,I_CHAR,ONE_CHAR), word.replaceFirst(I_STRING,ONE_STRING)};
         return replacements;  
     }
@@ -93,6 +97,8 @@ public class StringExtension {
     @param return the new string with @ where the letter 'a' or 'A' is
      */
     public static String[] replaceAWithAt(String word){
+         if(word == null)
+            throw new IllegalArgumentException("Word is null");
         String[] replacements = {word.replaceAll(A_STRING,AT_STRING),StringExtension.replaceLast(word,A_CHAR,AT_CHAR), word.replaceFirst(A_STRING,AT_STRING)};
         return replacements;
     }
@@ -101,6 +107,8 @@ public class StringExtension {
     @param return the new string with 3 where the letter 'e' or 'E' is
      */
     public static String[] replaceEWithThree(String word){
+        if(word == null)
+            throw new IllegalArgumentException("Word is null");
         String[] replacements = {word.replaceAll(E_STRING,THREE_STRING),StringExtension.replaceLast(word,E_CHAR,THREE_CHAR), word.replaceFirst(E_STRING,THREE_STRING)};
         return replacements;
     }

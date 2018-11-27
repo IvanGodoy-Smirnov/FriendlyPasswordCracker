@@ -65,7 +65,6 @@ public class PasswordCracker {
                 catch(UnsupportedEncodingException e){
                     e.printStackTrace();
                 }
-
         }
     }
      /**
