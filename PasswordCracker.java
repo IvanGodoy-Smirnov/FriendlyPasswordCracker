@@ -15,8 +15,29 @@ public class PasswordCracker {
         for(int index = 0; index < commonPasswords.size(); index ++) {
             String plainPassword = commonPasswords.get(index);
             try {
+                //Unaugmented password
                 String encryptedPassword = Sha1.hash(plainPassword);
                 database.save(plainPassword,encryptedPassword);
+
+                //Capitalizing first letter augmentation
+                encryptedPassword = Sha1.hash(capitalizeFirstLetter(plainPassword));
+                database.save(capitalizeFirstLetter(plainPassword), encryptedPassword);
+
+                //Replacing a with @ augmentation
+                encryptedPassword = Sha1.hash(replaceAWithAt(plainPassword));
+                database.save(replaceAWithAt(plainPassword), encryptedPassword);
+
+                //Replacing e with 3 augmentation
+                encryptedPassword = Sha1.hash(replaceEWithThree(plainPassword));
+                database.save(replaceEWithThree(plainPassword), encryptedPassword);
+
+                //Replacing i with 1 augmentation
+                encryptedPassword = Sha1.hash(replaceIWithOne(plainPassword));
+                database.save(replaceIWithOne(plainPassword), encryptedPassword);
+
+                //Appending '2018' augmentation 
+                encryptedPassword = Sha1.hash(addYear(plainPassword));
+                database.save(addYear(plainPassword), encryptedPassword);
             }
             catch (UnsupportedEncodingException e){
                 e.printStackTrace();
@@ -27,12 +48,15 @@ public class PasswordCracker {
     Cracks a password 
     @param encryptedPassword the password to be cracked
     @param database the database used to crack the password
-    @return the plain password if found, otherwise null
+    @return the plain password if found, otherwise it returns empty string
      */
     public String crackPassword(String encryptedPassword, DatabaseInterface database) {
         if(encryptedPassword == null || database == null)
             throw new IllegalArgumentException("Encrypted password and/or database is null");
-        return database.decrypt(encryptedPassword);
+        String plainPassword = database.decrypt(encryptedPassword);
+        if(plainPassword == null)
+            plainPassword = "";
+        return plainPassword;
     }
 
     /**
