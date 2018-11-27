@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Test {
     public static void main(String[] args){
         kika();
-        System.out.println("ied".replaceFirst('d','D'));
+        // System.out.println("ied".replaceFirst('d','D'));
         // PasswordCracker cracker = new PasswordCracker();
         // String[] testWords = new String[] {"isantose","SaintoEes","12isantos","123i54","!dfef","123456a"};
         // for(int index = 0; index < testWords.length;index++ ){
@@ -17,32 +17,34 @@ public class Test {
         passwords.add("santoise");
         passwords.add("siantoes");
         passwords.add("santosie");
-
         PasswordCracker cracker = new PasswordCracker();
 
-        for(int index = 0; index < passwords.size(); index++){
-            String stringToAdd = cracker.replaceAWithAt(passwords.get(index));
-            String stringToAddTwo = cracker.replaceEWithThree(passwords.get(index));
-            String stringToAddThree = cracker.replaceIWithOne(passwords.get(index));
-
-            if(!passwords.contains(stringToAdd)){
-                passwords.add(stringToAdd);
-            }
-
-            if(!passwords.contains(stringToAddTwo)){
-                passwords.add(stringToAddTwo);
-            }
+        System.out.println(cracker.replaceLast("anto",'s','$'));
 
 
-            // if(!passwords.contains(stringToAddThree)){
-            //     passwords.add(stringToAddThree);
-            // }
+        // for(int index = 0; index < passwords.size(); index++){
+        //     String stringToAdd = cracker.replaceAWithAt(passwords.get(index));
+        //     String stringToAddTwo = cracker.replaceEWithThree(passwords.get(index));
+        //     String stringToAddThree = cracker.replaceIWithOne(passwords.get(index));
 
-        }
-        for(int index = 0; index < passwords.size(); index++){
-           System.out.println(passwords.get(index));
-        }
-        System.out.println(passwords.size());
+        //     if(!passwords.contains(stringToAdd)){
+        //         passwords.add(stringToAdd);
+        //     }
+
+        //     if(!passwords.contains(stringToAddTwo)){
+        //         passwords.add(stringToAddTwo);
+        //     }
+
+
+        //     // if(!passwords.contains(stringToAddThree)){
+        //     //     passwords.add(stringToAddThree);
+        //     // }
+
+        // }
+        // for(int index = 0; index < passwords.size(); index++){
+        //    System.out.println(passwords.get(index));
+        // }
+        // System.out.println(passwords.size());
     }
 
     public void basicTest() {
