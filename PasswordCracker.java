@@ -12,36 +12,30 @@ public class PasswordCracker {
         if (commonPasswords == null || database == null) {
             throw new IllegalArgumentException("Common Password and/or database is null");
         }
-        for(int index = 0; index < commonPasswords.size(); index ++) {
-            String plainPassword = commonPasswords.get(index);
-            try {
-                //Unaugmented password
-                String encryptedPassword = Sha1.hash(plainPassword);
-                database.save(plainPassword,encryptedPassword);
+        ArrayList<String> augmentedPasswords = new ArrayList<String>(commonPasswords);
+        for(int index = 0; index < augmentedPasswords.size(); index ++) {
+            String plainPassword = augmentedPasswords.get(index);
+            insert(plainPassword,database,augmentedPasswords);
+            insert(capitalizeFirstLetter(plainPassword),database,augmentedPasswords);
+            insert(replaceAWithAt(plainPassword),database,augmentedPasswords);
+            insert(replaceEWithThree(plainPassword),database,augmentedPasswords);
+            insert(replaceIWithOne(plainPassword),database,augmentedPasswords);
+        }
+        for(int index = 0; index < augmentedPasswords.size(); index ++) {
+            insert(addYear(augmentedPasswords.get(index)),database,null);
+        }        
+        System.out.println(database.size());
+    }
 
-                //Capitalizing first letter augmentation
-                encryptedPassword = Sha1.hash(capitalizeFirstLetter(plainPassword));
-                database.save(capitalizeFirstLetter(plainPassword), encryptedPassword);
-
-                //Replacing a with @ augmentation
-                encryptedPassword = Sha1.hash(replaceAWithAt(plainPassword));
-                database.save(replaceAWithAt(plainPassword), encryptedPassword);
-
-                //Replacing e with 3 augmentation
-                encryptedPassword = Sha1.hash(replaceEWithThree(plainPassword));
-                database.save(replaceEWithThree(plainPassword), encryptedPassword);
-
-                //Replacing i with 1 augmentation
-                encryptedPassword = Sha1.hash(replaceIWithOne(plainPassword));
-                database.save(replaceIWithOne(plainPassword), encryptedPassword);
-
-                //Appending '2018' augmentation 
-                encryptedPassword = Sha1.hash(addYear(plainPassword));
-                database.save(addYear(plainPassword), encryptedPassword);
-            }
-            catch (UnsupportedEncodingException e){
-                e.printStackTrace();
-            }
+    private void insert(String plainPassword, DatabaseInterface database, ArrayList<String> augmentedPasswords){
+        try {
+            String encryptedPassword = Sha1.hash(plainPassword);
+            String previousPassword = database.save(plainPassword, encryptedPassword);
+            if (previousPassword == null && augmentedPasswords != null)
+                augmentedPasswords.add(plainPassword);
+        }
+        catch(UnsupportedEncodingException e){
+            e.printStackTrace();
         }
     }
     /**

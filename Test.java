@@ -3,6 +3,7 @@ import java.util.ArrayList;
 public class Test {
     public static void main(String[] args){
         kika();
+        System.out.println("ied".replaceFirst('d','D'));
         // PasswordCracker cracker = new PasswordCracker();
         // String[] testWords = new String[] {"isantose","SaintoEes","12isantos","123i54","!dfef","123456a"};
         // for(int index = 0; index < testWords.length;index++ ){
